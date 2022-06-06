@@ -1,7 +1,7 @@
 @startuml VMS 체인 벤더 업데이트 sequence diagram
 skinparam defaultFontName D2Coding
 
-scale 1
+scale 2
 title VMS 체인 벤더 업데이트 sequence diagram
 
 participant SNS<<Hubyo>>
@@ -9,7 +9,7 @@ participant ChainController<<CatalogYo>>
 participant SaveChainService<<CatalogYo>>
 participant ChainRepository<<CatalogYo>>
 
-SNS -> ChainController : Publish filter:{event:vms, entity:franchise}\nendpoint:/franchise/update
+SNS -> ChainController : Publish filter:{event:vms, entity:franchise}\nendpoint: POST /api/catalog/v1/chains
 activate ChainController
 
 ChainController -> ChainController : SNS Validation Check
