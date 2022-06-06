@@ -1,0 +1,49 @@
+@startuml VMS 체인 벤더 업데이트 sequence diagram
+skinparam defaultFontName D2Coding
+
+scale 1
+title VMS 체인 벤더 업데이트 sequence diagram
+
+participant SNS<<Hubyo>>
+participant ChainController<<CatalogYo>>
+participant SaveChainService<<CatalogYo>>
+participant ChainRepository<<CatalogYo>>
+
+SNS -> ChainController : Publish filter:{event:vms, entity:franchise}\nendpoint:/franchise/update
+activate ChainController
+
+ChainController -> ChainController : SNS Validation Check
+
+alt 최초 호출시
+    ChainController -> ChainController : Confirm Subscription
+else
+    ChainController -> SaveChainService : save or update chain
+    
+    activate SaveChainService 
+end
+
+SaveChainService -> ChainRepository : find chain
+activate ChainRepository
+
+ChainRepository --> SaveChainService : get chain
+deactivate ChainRepository
+
+alt chain exist 
+    SaveChainService -> ChainRepository : update
+    activate ChainRepository 
+    ChainRepository --> SaveChainService 
+    deactivate ChainRepository
+else chain not exist 
+    SaveChainService -> ChainRepository : save
+    activate ChainRepository 
+    ChainRepository --> SaveChainService 
+    deactivate ChainRepository
+end
+
+SaveChainService --> ChainController
+deactivate SaveChainService
+
+ChainController --> SNS
+deactivate ChainController
+
+@enduml
