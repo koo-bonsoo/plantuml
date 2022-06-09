@@ -1,0 +1,49 @@
+@startuml VMS 벤더 업데이트 sequence diagram
+skinparam defaultFontName D2Coding
+
+scale 2
+title VMS 벤더 업데이트 sequence diagram
+
+participant SNS<<Hubyo>>
+participant VendorController<<CatalogYo>>
+participant SaveVendorService<<CatalogYo>>
+participant VendorRepository<<CatalogYo>>
+
+SNS -> VendorController : Publish filter:{event:vms, entity:vendor}\nendpoint: POST /api/catalog/v1/vendor
+activate VendorController
+
+VendorController -> VendorController : SNS Validation Check
+
+alt 최초 호출시
+    VendorController -> VendorController : Confirm Subscription
+else
+    VendorController -> SaveVendorService : save or update vendor
+    
+    activate SaveVendorService 
+end
+
+SaveVendorService -> VendorRepository : find vendor
+activate VendorRepository
+
+VendorRepository --> SaveVendorService : get vendor
+deactivate VendorRepository
+
+alt vendor exist 
+    SaveVendorService -> VendorRepository : update
+    activate VendorRepository 
+    VendorRepository --> SaveVendorService 
+    deactivate VendorRepository
+else vendor not exist 
+    SaveVendorService -> VendorRepository : save
+    activate VendorRepository 
+    VendorRepository --> SaveVendorService 
+    deactivate VendorRepository
+end
+
+SaveVendorService --> VendorController
+deactivate SaveVendorService
+
+VendorController --> SNS
+deactivate VendorController
+
+@enduml
