@@ -5,30 +5,30 @@ scale 2
 title 재고 저장 sequence diagram 
 
 participant 중개사<<beyond>>
-participant Admin<<CatalogYo>>
+participant Front<<CatalogYo>>
 participant S3<<CatalogYo>>
 participant Batch<<CatalogYo>>
 database DB<<CatalogYo>>
 
-중개사 -> Admin : PATCH /stocks \nAttachments:json.zip
-activate Admin
+중개사 -> Front : API \nJsonBody,Attachments
+activate Front
 
 alt 업데이트 재고 저장
 
-    Admin -> DB : Bulk Update
+    Front -> DB : Bulk Update
     activate DB
 
-    DB --> Admin
+    DB --> Front
     deactivate DB
     
 else 전체 재고 저장
-    Admin -> S3 : upload\njson.zip
+    Front -> S3 : Attachments.gz
     activate S3
 
-    S3 --> Admin
+    S3 --> Front
     deactivate S3
 
-    Admin -> Batch : 배치 스케줄 실행
+    Front -> Batch : 배치 스케줄 실행
     activate Batch 
 
     Batch -> DB : Bulk Update
@@ -41,8 +41,8 @@ else 전체 재고 저장
 
 end
 
-    Admin --> 중개사
-    deactivate Admin
+    Front --> 중개사
+    deactivate Front
 
 
 @enduml
