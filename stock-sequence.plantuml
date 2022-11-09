@@ -10,7 +10,7 @@ participant S3<<CatalogYo>>
 participant Batch<<CatalogYo>>
 database DB<<CatalogYo>>
 
-중개사 -> Front : API \nJsonBody,Attachments
+중개사 -> Front : request API \nmultipart/form-data (.gz)
 activate Front
 
 alt 업데이트 재고 저장
@@ -22,7 +22,7 @@ alt 업데이트 재고 저장
     deactivate DB
     
 else 전체 재고 저장
-    Front -> S3 : Attachments.gz
+    Front -> S3 : upload (.gz)
     activate S3
 
     S3 --> Front
