@@ -1,0 +1,36 @@
+@startuml 상품현황 저장
+skinparam defaultFontName D2Coding
+
+scale 2
+title 상품현황 저장
+
+participant EventBridge<<CatalogYo>>
+participant Batch<<Catalogyo>>
+participant SQS<<CatalogYo>>
+database DB<<CatalogYo>>
+
+EventBridge -> Batch : 정의된 스케줄 실행\n(30분마다)
+activate Batch
+
+Batch -> SQS : 전체 메세지 요청
+activate SQS
+
+SQS --> Batch : 전체 메세지 응답
+deactivate SQS
+
+Batch -> Batch : 데이터 가공
+activate Batch
+
+Batch -> DB : 데이터 반영
+activate DB
+
+DB --> Batch
+deactivate DB
+deactivate Batch
+
+Batch --> EventBridge : 스케줄 종료
+deactivate Batch
+
+
+
+@enduml

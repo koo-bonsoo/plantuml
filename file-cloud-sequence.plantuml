@@ -4,13 +4,13 @@ skinparam defaultFontName D2Coding
 scale 2
 title 상품 이미지 맵핑 자동화
 
-actor EventBridge<<CatalogYo>>
+participant EventBridge<<CatalogYo>>
 participant Batch<<CatalogYo>>
 participant SFTP<<중개사>>
 participant FileCloud<<Yogiyo>>
 database DB<<CatalogYo>>
 
-EventBridge -> Batch : 스케줄 실행
+EventBridge -> Batch : 정의된 스케줄 실행
 activate Batch
 
 Batch -> SFTP : CSV File Download\n(Include image URL)
