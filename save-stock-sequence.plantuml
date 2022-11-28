@@ -6,43 +6,20 @@ title 재고 저장 sequence diagram
 
 participant 중개사<<beyond>>
 participant Front<<CatalogYo>>
-participant S3<<CatalogYo>>
-participant Batch<<CatalogYo>>
 database DB<<CatalogYo>>
 
-중개사 -> Front : request API \nmultipart/form-data (.gz)
+중개사 -> Front : request API \n30개 매장씩 나누어 호출
 activate Front
 
-alt 업데이트 재고 저장
+Front -> DB : Bulk Update
+activate DB
 
-    Front -> DB : Bulk Update
-    activate DB
-
-    DB --> Front
-    deactivate DB
-    
-else 전체 재고 저장
-    Front -> S3 : upload (.gz)
-    activate S3
-
-    S3 --> Front
-    deactivate S3
-
-    Front -> Batch : 배치 스케줄 실행
-    activate Batch 
-
-    Batch -> DB : Bulk Update
-    activate DB
-
-    DB --> Batch
-    deactivate DB
-    deactivate Batch
+DB --> Front
+deactivate DB
 
 
-end
-
-    Front --> 중개사
-    deactivate Front
+Front --> 중개사
+deactivate Front
 
 
 @enduml
