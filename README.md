@@ -1,1 +1,5 @@
 # plantuml
+
+```
+brew install graphviz
+```

@@ -1,0 +1,15 @@
+@startuml 가격조정 시나리오 
+skinparam defaultFontName D2Coding
+
+|Template Product|
+start
+:foo1;
+|#AntiqueWhite|Batch|
+:foo2;
+:foo3;
+|Swimlane1|
+:foo4;
+|Swimlane2|
+:foo5;
+stop
+@enduml

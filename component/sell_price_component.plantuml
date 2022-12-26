@@ -1,0 +1,42 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title 가격조정 System
+
+Person(user, "Admin User", "카탈로그요 어드민 운영자")
+Person_Ext(event, "AWS Event Bridge", "지정된 시간에 동작하는 시스템 고정배치")
+
+System_Boundary(catalogyo_admin, "Catalogyo ADMIN"){
+    Component(catalogyo_admin_1, "템플릿 상품 등록&수정" , "템플릿 > 상품 > 상세")
+    Component(catalogyo_admin_2, "템플릿 반영" , "작업내역 > 템플릿반영")
+}
+
+System_Boundary(catalogyo_batch, "Catalogyo Batch"){
+    Component(catalogyo_batch_1, "가격조정 정기배치" , "매일 0시", "Product 테이블의 가격을 일괄 변경한다.")
+    Component(catalogyo_batch_2, "템플릿 반영" , "즉시", "특정 템플릿의 데이터를 즉시 반영한다.")
+}
+
+ContainerDb(catalogyo_db, "Catalogyo Database", "RDS, Aurora", "카탈로그요 데이터베이스")
+
+
+
+
+
+
+
+Rel(user, catalogyo_admin_1, " ")
+Rel(user, catalogyo_admin_2, " ")
+
+
+Rel(catalogyo_admin_1, catalogyo_db, "DB반영", "template_product_sell_price")
+Rel(catalogyo_admin_2, catalogyo_batch_2, " ")
+Rel(catalogyo_batch_2, catalogyo_db, "DB반영", "product_sell_price_history, product", "템플릿 가격조정 기간이 포함된다면 즉시 조정가격까지 함께반영")
+Rel(event, catalogyo_batch_1, " ")
+Rel(catalogyo_batch_1, catalogyo_db, "DB반영", "product")
+
+
+@enduml
