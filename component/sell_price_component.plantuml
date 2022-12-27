@@ -17,7 +17,7 @@ System_Boundary(catalogyo_admin, "Catalogyo ADMIN"){
 }
 
 System_Boundary(catalogyo_batch, "Catalogyo Batch"){
-    Component(catalogyo_batch_1, "템플릿 정기배치" , "매일 N시", "요마트 템플릿의 데이터를 즉시 반영한다.")
+    Component(catalogyo_batch_1, "템플릿 정기배치" , "매일 N시", "요마트 템플릿의 데이터를 정해진 시간에 반영한다.")
     Component(catalogyo_batch_2, "템플릿 즉시반영" , "즉시", "요마트 템플릿의 데이터를 즉시 반영한다.")
 }
 
