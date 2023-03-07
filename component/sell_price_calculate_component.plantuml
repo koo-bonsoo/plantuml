@@ -1,0 +1,38 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title 가격조정,프로모션 CSV 정산배치
+
+
+Person_Ext(event, "AWS Event Bridge", "지정된 시간에 동작하는 시스템 고정배치")
+
+System_Boundary(catalogyo_batch, "Catalogyo Batch"){
+    Component(catalogyo_batch_1, "CSV 생성 배치" , "매일 02시", "작일 00:00:00 ~ 23:59:59 에 반영된 가격조정내역, 프로모션 테이블을 CSV 전달")
+    Component(catalogyo_batch_2, "CSV 생성 배치(전체분)" , "요청시", "데이터 정합이 맞지 않을 경우를 대비하여 전체 내역을 CSV 전달")
+    ContainerDb(catalogyo_db, "Catalogyo Database", "RDS, Aurora", "카탈로그요 데이터베이스")
+    System(catalogyo_s3, "Catalogyo S3", "배치에서 생성한 CSV 파일 보관", "")
+}
+
+System_Boundary(settlement, "Settlement"){
+    Component(settlement_1, "정산 시스템" , "", "카탈로그요 부터 전달받은 API 를 통해 S3 csv 파일 다운로드")
+}
+
+
+
+Rel(event, catalogyo_batch_1, " ")
+Rel(event, catalogyo_batch_2, " ")
+
+Rel(catalogyo_db, catalogyo_batch_1, "DB조회", "product_sell_price_history, promotion")
+Rel(catalogyo_db, catalogyo_batch_2, "DB조회", "product_sell_price_history, promotion")
+Rel(catalogyo_batch_1, catalogyo_s3, "CSV 업로드", "product_sell_price_history.csv, promotion.csv")
+Rel(catalogyo_batch_2, catalogyo_s3, "CSV 업로드", "product_sell_price_history.csv, promotion.csv")
+
+Rel(catalogyo_batch_1, settlement_1, "API", "csv 생성 요청 알림및 s3 파일경로 전달")
+Rel(settlement_1, catalogyo_s3, "", "csv 파일 다운로드")
+
+
+@enduml
