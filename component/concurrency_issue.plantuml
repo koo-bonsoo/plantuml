@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+' uncomment the following line and comment the first to use locally
+' !include C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title 동시성 이슈
+
+
+Boundary(group, "Server Group", ) {
+    Container(app1, "Web Application 1", "", )
+    Container(app2, "Web Application 2", "", )
+    Container(app3, "Web Application 3", "", )
+}
+
+ContainerDb(db, "Database", "", "" )
+
+Rel(app1, db, "stock += 5")
+Rel(app2, db, "stock += 2")
+Rel(app3, db, "stock += 3")
+
+@enduml
