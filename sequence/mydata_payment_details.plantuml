@@ -1,0 +1,42 @@
+@startuml 계정목록 조회
+skinparam defaultFontName D2Coding
+
+scale 2
+title 결제내역 조회
+
+actor 코스콤<<중개사>>
+participant MyData<<yogiyo>>
+database MyDataDB
+participant 코스콤API
+participant Payo
+
+
+코스콤 -> MyData : ci, customer_id, 기간, page 번호
+activate MyData
+
+MyData -> Payo : customer_id, 기간 전달
+activate Payo
+
+Payo --> MyData : 결제내역 응답( 결제유형, 주문번호, 결제일시, 결제금액 등)
+deactivate Payo
+
+MyData -> MyDataDB : 결제수단 기관코드 조회
+activate MyDataDB
+
+alt 기관코드가 있을경우
+   MyDataDB --> MyData : 기관코드 응답
+   deactivate MyDataDB
+else
+    MyData -> 코스콤API : 기관정보 조회
+    activate 코스콤API 
+
+    코스콤API --> MyData : 기관코드 응답후 DB 저장
+    deactivate 코스콤API
+end
+
+deactivate MyDataDB
+
+MyData --> 코스콤 : 결제내역정보 응답
+deactivate MyData
+
+@enduml

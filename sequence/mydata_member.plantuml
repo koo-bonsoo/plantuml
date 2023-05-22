@@ -1,0 +1,23 @@
+@startuml 가입여부 조회
+skinparam defaultFontName D2Coding
+
+scale 2
+title 고객 가입여부 확인
+
+actor 코스콤<<중개사>>
+participant MyData<<yogiyo>>
+participant Dowant<<Memberyo>>
+
+코스콤 -> MyData : 고객 가입여부 확인 ci
+activate MyData
+
+MyData -> Dowant : ci 전달
+activate Dowant
+
+Dowant --> MyData : 회원정보 응답
+deactivate Dowant
+
+MyData --> 코스콤 : Y/N 응답
+deactivate MyData
+
+@enduml

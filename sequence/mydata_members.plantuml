@@ -1,0 +1,23 @@
+@startuml 계정목록 조회
+skinparam defaultFontName D2Coding
+
+scale 2
+title 계정목록 조회
+
+actor 코스콤<<중개사>>
+participant MyData<<yogiyo>>
+participant Dowant<<Memberyo>>
+
+코스콤 -> MyData : ci 전달
+activate MyData
+
+MyData -> Dowant : ci 전달
+activate Dowant
+
+Dowant --> MyData : 회원정보 응답
+deactivate Dowant
+
+MyData --> 코스콤 : account_id, customer_id, 가입일 응답
+deactivate MyData
+
+@enduml
