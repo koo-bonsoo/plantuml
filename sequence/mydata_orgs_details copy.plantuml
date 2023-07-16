@@ -1,0 +1,23 @@
+@startuml 기관정보 조회
+skinparam defaultFontName D2Coding
+
+scale 2
+title 기관정보 조회
+
+participant EventBridge
+participant MyData<<yogiyo>>
+participant 코스콤<<중개사>>
+database MyDataDB
+
+
+EventBridge -> MyData : 매일 06시 요청
+
+MyData -> 코스콤 : 기관정보 조회
+activate 코스콤
+
+코스콤 --> MyData : 기관목록 응답
+deactivate 코스콤
+
+MyData -> MyDataDB : 기관목록 저장
+
+@enduml
