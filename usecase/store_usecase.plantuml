@@ -1,0 +1,62 @@
+@startuml 마이데이터 유스케이스
+skinparam defaultFontName D2Coding
+
+scale 2
+title 스토어 유스케이스
+
+left to right direction
+actor "관리자" as admin
+actor "유저" as user
+
+package "요기요 앱" as ygy_app {
+    usecase "홈 카테고리 조회" as home_category
+    usecase "스윔레인 조회" as swimlane
+    usecase "그리드 카테고리 조회" as grid_category
+    usecase "전체 카테고리 조회" as total_category
+    usecase "이벤트 페이지 조회" as event_page
+    usecase "카테고리내 상품목록 조회" as category_products
+    usecase "상품상세 조회" as product_detail
+}
+
+package "커머스요 어드민" as commerceyo_admin {
+    usecase "홈 전시 관리" as home_display_management
+    usecase "이벤트 관리" as event_management
+    usecase "스윔레인 관리" as swimlane_management
+    usecase "배너 관리" as banner_management
+    usecase "팝업 관리" as popup_management
+    usecase "정책 관리" as policy_management
+    usecase "콘텐츠 관리" as contents_management
+}
+
+package "카탈로그요 어드민" as catalogyo_admin {
+    package "템플릿 관리" as catalogyo_template {
+        usecase "카테고리 관리" as category_management
+        usecase "상품 관리" as product_management
+        usecase "프로모션 관리" as promotion_management
+        usecase "옵션 관리" as option_management
+    }
+    usecase "템플릿 반영 배치" as category_sync_management
+}
+
+user --> home_category
+user --> swimlane 
+user --> grid_category 
+user --> total_category 
+user --> event_page 
+user --> category_products 
+user --> product_detail 
+
+admin --> home_display_management
+admin --> event_management
+admin --> swimlane_management
+admin --> banner_management
+admin --> popup_management
+admin --> policy_management
+admin --> contents_management
+
+admin --> category_sync_management
+admin --> category_management
+admin --> product_management
+admin --> promotion_management
+admin --> option_management
+@enduml
