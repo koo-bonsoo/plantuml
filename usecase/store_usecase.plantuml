@@ -2,13 +2,14 @@
 skinparam defaultFontName D2Coding
 
 scale 2
+
 title 스토어 유스케이스
 
 left to right direction
 actor "관리자" as admin
 actor "유저" as user
 
-package "요기요 앱" as ygy_app {
+package "요기요 스토어 홈" as ygy_app {
     usecase "홈 카테고리 조회" as home_category
     usecase "스윔레인 조회" as swimlane
     usecase "그리드 카테고리 조회" as grid_category
@@ -16,6 +17,8 @@ package "요기요 앱" as ygy_app {
     usecase "이벤트 페이지 조회" as event_page
     usecase "카테고리내 상품목록 조회" as category_products
     usecase "상품상세 조회" as product_detail
+    usecase "장바구니 담기" as cart
+    usecase "상품 주문" as order
 }
 
 package "커머스요 어드민" as commerceyo_admin {
@@ -45,6 +48,8 @@ user --> total_category
 user --> event_page 
 user --> category_products 
 user --> product_detail 
+user --> cart 
+user --> order 
 
 admin --> home_display_management
 admin --> event_management
